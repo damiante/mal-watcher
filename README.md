@@ -75,7 +75,7 @@ username2
 
 1. Pull the image from GitHub Container Registry:
 ```bash
-docker pull ghcr.io/yourusername/mal-watcher:latest
+docker pull ghcr.io/damiante/mal-watcher:latest
 ```
 
 2. Create your configuration files (`config.yaml` and `tracked_users`)
@@ -86,7 +86,7 @@ docker run -d \
   --name mal-watcher \
   -v /path/to/config.yaml:/app/config.yaml:ro \
   -v /path/to/tracked_users:/app/tracked_users:ro \
-  ghcr.io/yourusername/mal-watcher:latest
+  ghcr.io/damiante/mal-watcher:latest
 ```
 
 Or use environment variables:
@@ -99,7 +99,7 @@ docker run -d \
   -e SEARCH_FREQUENCY_MINUTES=60 \
   -e LOG_LEVEL=INFO \
   -v /path/to/tracked_users:/app/tracked_users:ro \
-  ghcr.io/yourusername/mal-watcher:latest
+  ghcr.io/damiante/mal-watcher:latest
 ```
 
 ### Docker Compose
@@ -110,7 +110,7 @@ version: '3.8'
 
 services:
   mal-watcher:
-    image: ghcr.io/yourusername/mal-watcher:latest
+    image: ghcr.io/damiante/mal-watcher:latest
     container_name: mal-watcher
     volumes:
       - ./config.yaml:/app/config.yaml:ro
@@ -136,7 +136,7 @@ python main.py
 
 With Docker:
 ```bash
-docker run -v ./config.yaml:/app/config.yaml:ro -v ./tracked_users:/app/tracked_users:ro ghcr.io/yourusername/mal-watcher:latest
+docker run -v ./config.yaml:/app/config.yaml:ro -v ./tracked_users:/app/tracked_users:ro ghcr.io/damiante/mal-watcher:latest
 ```
 
 ### Manual Mode
@@ -148,7 +148,7 @@ python main.py --manual
 
 With Docker:
 ```bash
-docker run -v ./config.yaml:/app/config.yaml:ro -v ./tracked_users:/app/tracked_users:ro ghcr.io/yourusername/mal-watcher:latest --manual
+docker run -v ./config.yaml:/app/config.yaml:ro -v ./tracked_users:/app/tracked_users:ro ghcr.io/damiante/mal-watcher:latest --manual
 ```
 
 ### Command Line Options

@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   mal-watcher:
-    image: ghcr.io/yourusername/mal-watcher:latest
+    image: ghcr.io/damiante/mal-watcher:latest
     container_name: mal-watcher
     volumes:
       # Mount your config.yaml file
