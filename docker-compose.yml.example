@@ -13,10 +13,14 @@ services:
       - SONARR_API_KEY=your_sonarr_api_key_here
       # Required: Tracked users (comma-separated list)
       - MAL_TRACKED_USERS=username1,username2,username3
+      # Optional: Sonarr root folder for anime (if not set, uses first available)
+      - SONARR_ROOT_FOLDER=/media/Anime
+      # Optional: Sonarr quality profile ID (if not set, uses first available)
+      # - SONARR_QUALITY_PROFILE_ID=1
       # Optional: Sync frequency in minutes (default: 60)
       - SEARCH_FREQUENCY_MINUTES=60
       # Optional: Log level (default: INFO)
-      - LOG_LEVEL=INFO
+      - LOG_LEVEL=DEBUG
 
   # Alternative: Use config.yaml file instead of environment variables
   # mal-watcher-file-based:

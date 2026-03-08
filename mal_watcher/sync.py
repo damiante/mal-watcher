@@ -13,16 +13,26 @@ logger = logging.getLogger(__name__)
 class MalWatcherSync:
     """Handles synchronization between MyAnimeList and Sonarr."""
 
-    def __init__(self, mal_client: MALClient, sonarr_client: SonarrClient):
+    def __init__(
+        self,
+        mal_client: MALClient,
+        sonarr_client: SonarrClient,
+        sonarr_root_folder: str = "",
+        sonarr_quality_profile_id: int = 0
+    ):
         """
         Initialize the sync handler.
 
         Args:
             mal_client: MAL API client
             sonarr_client: Sonarr API client
+            sonarr_root_folder: Root folder path for anime (optional, will auto-detect if not set)
+            sonarr_quality_profile_id: Quality profile ID (optional, will auto-detect if not set)
         """
         self.mal_client = mal_client
         self.sonarr_client = sonarr_client
+        self.sonarr_root_folder = sonarr_root_folder
+        self.sonarr_quality_profile_id = sonarr_quality_profile_id
 
     def sync_user(self, username: str) -> Dict[str, int]:
         """
@@ -60,20 +70,29 @@ class MalWatcherSync:
         sonarr_series = self.sonarr_client.get_all_series()
         logger.info(f"Currently tracking {len(sonarr_series)} series in Sonarr")
 
-        # Get root folder and quality profile for adding series
-        root_folders = self.sonarr_client.get_root_folders()
-        quality_profiles = self.sonarr_client.get_quality_profiles()
+        # Determine root folder and quality profile
+        # Use configured values if set, otherwise auto-detect from Sonarr
+        if self.sonarr_root_folder:
+            root_folder_path = self.sonarr_root_folder
+            logger.info(f"Using configured root folder: {root_folder_path}")
+        else:
+            root_folders = self.sonarr_client.get_root_folders()
+            if not root_folders:
+                logger.error("No root folders configured in Sonarr. Cannot add series.")
+                return stats
+            root_folder_path = root_folders[0].get("path", "/tv")
+            logger.info(f"Auto-detected root folder: {root_folder_path}")
 
-        if not root_folders:
-            logger.error("No root folders configured in Sonarr. Cannot add series.")
-            return stats
-
-        if not quality_profiles:
-            logger.error("No quality profiles configured in Sonarr. Cannot add series.")
-            return stats
-
-        root_folder_path = root_folders[0].get("path", "/tv")
-        quality_profile_id = quality_profiles[0].get("id", 1)
+        if self.sonarr_quality_profile_id:
+            quality_profile_id = self.sonarr_quality_profile_id
+            logger.info(f"Using configured quality profile ID: {quality_profile_id}")
+        else:
+            quality_profiles = self.sonarr_client.get_quality_profiles()
+            if not quality_profiles:
+                logger.error("No quality profiles configured in Sonarr. Cannot add series.")
+                return stats
+            quality_profile_id = quality_profiles[0].get("id", 1)
+            logger.info(f"Auto-detected quality profile ID: {quality_profile_id}")
 
         # Process each anime
         for anime_entry in anime_list:

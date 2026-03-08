@@ -46,7 +46,12 @@ def run_sync(config: Config) -> bool:
         sonarr_client = SonarrClient(config.sonarr_url, config.sonarr_api_key)
 
         # Initialize sync handler
-        sync_handler = MalWatcherSync(mal_client, sonarr_client)
+        sync_handler = MalWatcherSync(
+            mal_client,
+            sonarr_client,
+            sonarr_root_folder=config.sonarr_root_folder,
+            sonarr_quality_profile_id=config.sonarr_quality_profile_id
+        )
 
         # Run sync
         stats = sync_handler.sync_all_users(tracked_users)

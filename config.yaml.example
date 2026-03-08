@@ -13,6 +13,10 @@ env-prod:
     value: http://localhost:8989
   - name: SONARR_API_KEY
     value: your_sonarr_api_key_here
+  - name: SONARR_ROOT_FOLDER
+    value: /media/Anime
+  - name: SONARR_QUALITY_PROFILE_ID
+    value: 1
   - name: LOG_LEVEL
     value: INFO
 
@@ -27,5 +31,9 @@ env-dev:
     value: http://localhost:8989
   - name: SONARR_API_KEY
     value: your_sonarr_api_key_here
+  - name: SONARR_ROOT_FOLDER
+    value: /media/Anime
+  - name: SONARR_QUALITY_PROFILE_ID
+    value: 1
   - name: LOG_LEVEL
     value: DEBUG

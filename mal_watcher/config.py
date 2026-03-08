@@ -22,6 +22,8 @@ class Config:
         self.tracked_users_file: str = "./tracked_users"
         self.sonarr_url: str = ""
         self.sonarr_api_key: str = ""
+        self.sonarr_root_folder: str = ""
+        self.sonarr_quality_profile_id: int = 1
         self.log_level: str = "INFO"
 
         # Load from config file if it exists
@@ -56,6 +58,10 @@ class Config:
                     self.sonarr_url = value
                 elif name == 'SONARR_API_KEY':
                     self.sonarr_api_key = value
+                elif name == 'SONARR_ROOT_FOLDER':
+                    self.sonarr_root_folder = value
+                elif name == 'SONARR_QUALITY_PROFILE_ID':
+                    self.sonarr_quality_profile_id = int(value)
                 elif name == 'LOG_LEVEL':
                     self.log_level = value.upper()
 
@@ -71,6 +77,10 @@ class Config:
             self.sonarr_url = os.getenv('SONARR_URL')
         if os.getenv('SONARR_API_KEY'):
             self.sonarr_api_key = os.getenv('SONARR_API_KEY')
+        if os.getenv('SONARR_ROOT_FOLDER'):
+            self.sonarr_root_folder = os.getenv('SONARR_ROOT_FOLDER')
+        if os.getenv('SONARR_QUALITY_PROFILE_ID'):
+            self.sonarr_quality_profile_id = int(os.getenv('SONARR_QUALITY_PROFILE_ID'))
         if os.getenv('LOG_LEVEL'):
             self.log_level = os.getenv('LOG_LEVEL').upper()
 

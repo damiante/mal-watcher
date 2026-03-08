@@ -116,6 +116,7 @@ services:
       - SONARR_URL=http://sonarr:8989
       - SONARR_API_KEY=your_sonarr_api_key_here
       - MAL_TRACKED_USERS=username1,username2,username3
+      - SONARR_ROOT_FOLDER=/media/Anime
       - SEARCH_FREQUENCY_MINUTES=60
       - LOG_LEVEL=INFO
 ```
@@ -199,10 +200,15 @@ env-prod:
 
 All configuration can be set via environment variables (recommended for Docker):
 
-- `X_MAL_CLIENT_ID`: MyAnimeList API Client ID (required)
-- `SONARR_URL`: Sonarr server URL (required)
-- `SONARR_API_KEY`: Sonarr API key (required)
-- `MAL_TRACKED_USERS`: Comma-separated list of MAL usernames (recommended for Docker)
+**Required:**
+- `X_MAL_CLIENT_ID`: MyAnimeList API Client ID
+- `SONARR_URL`: Sonarr server URL
+- `SONARR_API_KEY`: Sonarr API key
+- `MAL_TRACKED_USERS`: Comma-separated list of MAL usernames (or use MAL_TRACKED_USERS_FILE)
+
+**Optional:**
+- `SONARR_ROOT_FOLDER`: Root folder path for anime downloads (e.g., `/media/Anime`). If not set, uses the first available root folder from Sonarr
+- `SONARR_QUALITY_PROFILE_ID`: Quality profile ID to use (e.g., `1`). If not set, uses the first available quality profile from Sonarr
 - `MAL_TRACKED_USERS_FILE`: Path to tracked users file (alternative to MAL_TRACKED_USERS)
 - `SEARCH_FREQUENCY_MINUTES`: Minutes between sync cycles (default: 60)
 - `LOG_LEVEL`: Logging level - DEBUG, INFO, WARNING, ERROR (default: INFO)
