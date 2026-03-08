@@ -78,9 +78,20 @@ username2
 docker pull ghcr.io/damiante/mal-watcher:latest
 ```
 
-2. Create your configuration files (`config.yaml` and `tracked_users`)
+2. Run with environment variables (recommended):
+```bash
+docker run -d \
+  --name mal-watcher \
+  -e X_MAL_CLIENT_ID=your_client_id \
+  -e SONARR_URL=http://sonarr:8989 \
+  -e SONARR_API_KEY=your_api_key \
+  -e MAL_TRACKED_USERS=username1,username2,username3 \
+  -e SEARCH_FREQUENCY_MINUTES=60 \
+  -e LOG_LEVEL=INFO \
+  ghcr.io/damiante/mal-watcher:latest
+```
 
-3. Run with Docker:
+Or use configuration files:
 ```bash
 docker run -d \
   --name mal-watcher \
@@ -89,20 +100,7 @@ docker run -d \
   ghcr.io/damiante/mal-watcher:latest
 ```
 
-Or use environment variables:
-```bash
-docker run -d \
-  --name mal-watcher \
-  -e X_MAL_CLIENT_ID=your_client_id \
-  -e SONARR_URL=http://sonarr:8989 \
-  -e SONARR_API_KEY=your_api_key \
-  -e SEARCH_FREQUENCY_MINUTES=60 \
-  -e LOG_LEVEL=INFO \
-  -v /path/to/tracked_users:/app/tracked_users:ro \
-  ghcr.io/damiante/mal-watcher:latest
-```
-
-### Docker Compose
+### Docker Compose (Recommended)
 
 Create a `docker-compose.yml`:
 ```yaml
@@ -112,11 +110,13 @@ services:
   mal-watcher:
     image: ghcr.io/damiante/mal-watcher:latest
     container_name: mal-watcher
-    volumes:
-      - ./config.yaml:/app/config.yaml:ro
-      - ./tracked_users:/app/tracked_users:ro
     restart: unless-stopped
     environment:
+      - X_MAL_CLIENT_ID=your_mal_client_id_here
+      - SONARR_URL=http://sonarr:8989
+      - SONARR_API_KEY=your_sonarr_api_key_here
+      - MAL_TRACKED_USERS=username1,username2,username3
+      - SEARCH_FREQUENCY_MINUTES=60
       - LOG_LEVEL=INFO
 ```
 
@@ -197,23 +197,35 @@ env-prod:
 
 ### Environment Variables
 
-All configuration can be set via environment variables (useful for Docker):
+All configuration can be set via environment variables (recommended for Docker):
 
-- `X_MAL_CLIENT_ID`: MyAnimeList API Client ID
-- `SEARCH_FREQUENCY_MINUTES`: Minutes between sync cycles
-- `MAL_TRACKED_USERS_FILE`: Path to tracked users file
-- `SONARR_URL`: Sonarr server URL
-- `SONARR_API_KEY`: Sonarr API key
-- `LOG_LEVEL`: Logging level (DEBUG, INFO, WARNING, ERROR)
+- `X_MAL_CLIENT_ID`: MyAnimeList API Client ID (required)
+- `SONARR_URL`: Sonarr server URL (required)
+- `SONARR_API_KEY`: Sonarr API key (required)
+- `MAL_TRACKED_USERS`: Comma-separated list of MAL usernames (recommended for Docker)
+- `MAL_TRACKED_USERS_FILE`: Path to tracked users file (alternative to MAL_TRACKED_USERS)
+- `SEARCH_FREQUENCY_MINUTES`: Minutes between sync cycles (default: 60)
+- `LOG_LEVEL`: Logging level - DEBUG, INFO, WARNING, ERROR (default: INFO)
 
-### Tracked Users File
+### Tracked Users
 
-Simple text file with one MAL username per line:
+You can specify tracked users in two ways:
+
+**1. Environment Variable (Recommended for Docker):**
+```bash
+MAL_TRACKED_USERS=username1,username2,username3
+```
+
+**2. File-based (Traditional):**
+
+Create a `tracked_users` file with one MAL username per line:
 ```
 MoxPeanut
 AnotherUser
 YetAnotherUser
 ```
+
+**Priority:** If `MAL_TRACKED_USERS` is set, it takes precedence over the file.
 
 Note: Users must have public anime lists.
 

@@ -1,3 +1,7 @@
+# Configuration file for MAL Watcher
+# All values can be overridden with environment variables
+# For Docker: use MAL_TRACKED_USERS environment variable instead of file
+
 env-prod:
   - name: X-MAL-CLIENT-ID
     value: your_mal_client_id_here

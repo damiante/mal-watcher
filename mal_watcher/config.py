@@ -74,6 +74,9 @@ class Config:
         if os.getenv('LOG_LEVEL'):
             self.log_level = os.getenv('LOG_LEVEL').upper()
 
+        # Store tracked users from environment if provided
+        self.tracked_users_env = os.getenv('MAL_TRACKED_USERS', '')
+
     def _validate(self):
         """Validate required configuration fields."""
         if not self.mal_client_id:
@@ -87,9 +90,20 @@ class Config:
         """
         Read and return the list of tracked users.
 
+        Priority:
+        1. MAL_TRACKED_USERS environment variable (comma-separated)
+        2. File specified in tracked_users_file
+
         Returns:
             List of usernames to track
         """
+        # Check environment variable first (preferred for Docker)
+        if hasattr(self, 'tracked_users_env') and self.tracked_users_env:
+            users = [user.strip() for user in self.tracked_users_env.split(',') if user.strip()]
+            if users:
+                return users
+
+        # Fall back to file-based configuration
         users_path = Path(self.tracked_users_file)
         if not users_path.exists():
             return []

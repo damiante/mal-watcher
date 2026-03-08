@@ -4,23 +4,33 @@ services:
   mal-watcher:
     image: ghcr.io/damiante/mal-watcher:latest
     container_name: mal-watcher
-    volumes:
-      # Mount your config.yaml file
-      - ./config.yaml:/app/config.yaml:ro
-      # Mount your tracked_users file
-      - ./tracked_users:/app/tracked_users:ro
     restart: unless-stopped
     environment:
-      # Optional: Override log level
+      # Required: MAL API Client ID
+      - X_MAL_CLIENT_ID=your_mal_client_id_here
+      # Required: Sonarr connection details
+      - SONARR_URL=http://sonarr:8989
+      - SONARR_API_KEY=your_sonarr_api_key_here
+      # Required: Tracked users (comma-separated list)
+      - MAL_TRACKED_USERS=username1,username2,username3
+      # Optional: Sync frequency in minutes (default: 60)
+      - SEARCH_FREQUENCY_MINUTES=60
+      # Optional: Log level (default: INFO)
       - LOG_LEVEL=INFO
-    # Optional: Uncomment to use environment variables instead of config.yaml
-    # environment:
-    #   - X_MAL_CLIENT_ID=your_mal_client_id
-    #   - SONARR_URL=http://sonarr:8989
-    #   - SONARR_API_KEY=your_sonarr_api_key
-    #   - SEARCH_FREQUENCY_MINUTES=60
-    #   - MAL_TRACKED_USERS_FILE=/app/tracked_users
-    #   - LOG_LEVEL=INFO
+
+  # Alternative: Use config.yaml file instead of environment variables
+  # mal-watcher-file-based:
+  #   image: ghcr.io/damiante/mal-watcher:latest
+  #   container_name: mal-watcher
+  #   volumes:
+  #     # Mount your config.yaml file
+  #     - ./config.yaml:/app/config.yaml:ro
+  #     # Mount your tracked_users file
+  #     - ./tracked_users:/app/tracked_users:ro
+  #   restart: unless-stopped
+  #   environment:
+  #     # Optional: Override log level
+  #     - LOG_LEVEL=INFO
 
   # Example: If you're also running Sonarr in Docker
   # sonarr:
