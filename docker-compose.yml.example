@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  mal-watcher:
+    image: ghcr.io/yourusername/mal-watcher:latest
+    container_name: mal-watcher
+    volumes:
+      # Mount your config.yaml file
+      - ./config.yaml:/app/config.yaml:ro
+      # Mount your tracked_users file
+      - ./tracked_users:/app/tracked_users:ro
+    restart: unless-stopped
+    environment:
+      # Optional: Override log level
+      - LOG_LEVEL=INFO
+    # Optional: Uncomment to use environment variables instead of config.yaml
+    # environment:
+    #   - X_MAL_CLIENT_ID=your_mal_client_id
+    #   - SONARR_URL=http://sonarr:8989
+    #   - SONARR_API_KEY=your_sonarr_api_key
+    #   - SEARCH_FREQUENCY_MINUTES=60
+    #   - MAL_TRACKED_USERS_FILE=/app/tracked_users
+    #   - LOG_LEVEL=INFO
+
+  # Example: If you're also running Sonarr in Docker
+  # sonarr:
+  #   image: linuxserver/sonarr:latest
+  #   container_name: sonarr
+  #   environment:
+  #     - PUID=1000
+  #     - PGID=1000
+  #     - TZ=America/New_York
+  #   volumes:
+  #     - ./sonarr-config:/config
+  #     - /path/to/tv:/tv
+  #     - /path/to/downloads:/downloads
+  #   ports:
+  #     - 8989:8989
+  #   restart: unless-stopped

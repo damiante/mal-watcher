@@ -1,0 +1,82 @@
+REQUEST:
+curl 'https://api.myanimelist.net/v2/users/{username}/animelist?fields=list_status&limit=4' \
+-H 'Authorization: Bearer YOUR_TOKEN'
+
+RESPONSE:
+content-type: application/json
+body:
+{
+  "data": [
+    {
+      "node": {
+        "id": 31646,
+        "title": "3-gatsu no Lion",
+        "main_picture": {
+          "medium": "https://myanimelist.cdn-dena.com/images/anime/12/82901.jpg",
+          "large": "https://myanimelist.cdn-dena.com/images/anime/12/82901l.jpg"
+        }
+      },
+      "list_status": {
+        "status": "plan_to_watch",
+        "score": 0,
+        "num_watched_episodes": 0,
+        "is_rewatching": false,
+        "updated_at": "2017-11-11T19:52:16+00:00"
+      }
+    },
+    {
+      "node": {
+        "id": 35180,
+        "title": "3-gatsu no Lion 2nd Season",
+        "main_picture": {
+          "medium": "https://myanimelist.cdn-dena.com/images/anime/3/88469.jpg",
+          "large": "https://myanimelist.cdn-dena.com/images/anime/3/88469l.jpg"
+        }
+      },
+      "list_status": {
+        "status": "plan_to_watch",
+        "score": 0,
+        "num_watched_episodes": 0,
+        "is_rewatching": false,
+        "updated_at": "2017-11-11T19:50:11+00:00"
+      }
+    },
+    {
+      "node": {
+        "id": 32998,
+        "title": "91 Days",
+        "main_picture": {
+          "medium": "https://myanimelist.cdn-dena.com/images/anime/13/80515.jpg",
+          "large": "https://myanimelist.cdn-dena.com/images/anime/13/80515l.jpg"
+        }
+      },
+      "list_status": {
+        "status": "plan_to_watch",
+        "score": 0,
+        "num_episodes_watched": 0,
+        "is_rewatching": false,
+        "updated_at": "2017-11-11T20:02:15+00:00"
+      }
+    },
+    {
+      "node": {
+        "id": 9201,
+        "title": "Air Gear: Kuro no Hane to Nemuri no Mori - Break on the Sky",
+        "main_picture": {
+          "medium": "https://myanimelist.cdn-dena.com/images/anime/8/74158.jpg",
+          "large": "https://myanimelist.cdn-dena.com/images/anime/8/74158l.jpg"
+        }
+      },
+      "list_status": {
+        "status": "plan_to_watch",
+        "score": 0,
+        "num_episodes_watched": 0,
+        "is_rewatching": false,
+        "updated_at": "2017-11-11T20:07:57+00:00"
+      }
+    }
+  ],
+  "paging": {
+    "next": "https://api.myanimelist.net/v2/users/@me/animelist?offset=4&fields=list_status&limit=4"
+  }
+}

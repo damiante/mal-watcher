@@ -1,0 +1,27 @@
+env-prod:
+  - name: X-MAL-CLIENT-ID
+    value: your_mal_client_id_here
+  - name: SEARCH_FREQUENCY_MINUTES
+    value: 60
+  - name: MAL_TRACKED_USERS_FILE
+    value: ./tracked_users
+  - name: SONARR_URL
+    value: http://localhost:8989
+  - name: SONARR_API_KEY
+    value: your_sonarr_api_key_here
+  - name: LOG_LEVEL
+    value: INFO
+
+env-dev:
+  - name: X-MAL-CLIENT-ID
+    value: your_mal_client_id_here
+  - name: SEARCH_FREQUENCY_MINUTES
+    value: 5
+  - name: MAL_TRACKED_USERS_FILE
+    value: ./tracked_users
+  - name: SONARR_URL
+    value: http://localhost:8989
+  - name: SONARR_API_KEY
+    value: your_sonarr_api_key_here
+  - name: LOG_LEVEL
+    value: DEBUG
