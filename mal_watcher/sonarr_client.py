@@ -75,8 +75,7 @@ class SonarrClient:
         root_folder_path: str = "/tv",
         quality_profile_id: int = 1,
         monitor: str = "all",
-        search_on_add: bool = True,
-        mal_id: Optional[int] = None
+        search_on_add: bool = True
     ) -> Optional[Dict[str, Any]]:
         """
         Add a series to Sonarr.
@@ -87,7 +86,6 @@ class SonarrClient:
             quality_profile_id: Quality profile ID to use
             monitor: Monitoring mode (all, future, missing, existing, firstSeason, latestSeason, none)
             search_on_add: Whether to search for episodes immediately
-            mal_id: MyAnimeList ID to tag the series with
 
         Returns:
             Added series data, or None if failed
@@ -95,16 +93,15 @@ class SonarrClient:
         url = f"{self.base_url}/api/v3/series"
 
         # Prepare the series data for adding
+        # Use most fields directly from the lookup result
         payload = {
             "title": series_data.get("title"),
             "qualityProfileId": quality_profile_id,
             "titleSlug": series_data.get("titleSlug"),
             "images": series_data.get("images", []),
             "seasons": series_data.get("seasons", []),
-            "path": f"{root_folder_path}/{series_data.get('title', '').replace('/', '_')}",
             "rootFolderPath": root_folder_path,
             "monitored": True,
-            "tvdbId": series_data.get("tvdbId"),
             "addOptions": {
                 "monitor": monitor,
                 "searchForMissingEpisodes": search_on_add,
@@ -112,9 +109,18 @@ class SonarrClient:
             }
         }
 
-        # Add MAL ID as a tag if provided
-        if mal_id:
-            payload["tags"] = [f"mal-{mal_id}"]
+        # Add optional fields if they exist in the lookup data
+        if series_data.get("tvdbId"):
+            payload["tvdbId"] = series_data.get("tvdbId")
+
+        if series_data.get("tvMazeId"):
+            payload["tvMazeId"] = series_data.get("tvMazeId")
+
+        if series_data.get("seriesType"):
+            payload["seriesType"] = series_data.get("seriesType")
+
+        # Note: We're NOT adding tags because they require existing tag IDs
+        # MAL ID tracking can be added later if needed via a separate tag creation workflow
 
         try:
             response = requests.post(url, headers=self.headers, json=payload)
@@ -125,8 +131,9 @@ class SonarrClient:
 
         except requests.exceptions.RequestException as e:
             logger.error(f"Error adding series '{series_data.get('title')}': {e}")
-            if hasattr(e.response, 'text'):
-                logger.debug(f"Response: {e.response.text}")
+            if hasattr(e, 'response') and e.response is not None:
+                logger.error(f"Response status: {e.response.status_code}")
+                logger.error(f"Response body: {e.response.text}")
             return None
 
     def get_root_folders(self) -> List[Dict[str, Any]]:

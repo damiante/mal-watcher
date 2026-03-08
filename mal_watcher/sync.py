@@ -226,8 +226,7 @@ class MalWatcherSync:
                     root_folder_path=root_folder_path,
                     quality_profile_id=quality_profile_id,
                     monitor="all",
-                    search_on_add=True,
-                    mal_id=anime_id
+                    search_on_add=True
                 )
 
                 if added:
