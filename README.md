@@ -34,7 +34,7 @@ A Python service that automatically synchronizes anime from MyAnimeList user lis
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/mal-watcher.git
+git clone https://github.com/damiante/mal-watcher.git
 cd mal-watcher
 ```
 
